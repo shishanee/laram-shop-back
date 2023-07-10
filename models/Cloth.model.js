@@ -5,21 +5,19 @@ const clothSchema = mongoose.Schema({
   description: String,
   price: Number,
   category: {
-    ref: "Category",
     type: mongoose.SchemaTypes.ObjectId,
-    collection: {
-      ref: "Collection",
-      type: mongoose.SchemaTypes.ObjectId,
-    },
+    ref: "Category",
+  },
+  collections: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: "Collection",
   },
   image: [],
-  size: [
-    { size: String, inStock: Number },
-],
+  size: [{ size: String, inStock: Number }],
   discount: {
     type: Number,
-    default: 0 
-  }
+    default: 0,
+  },
 });
 
 const Cloth = mongoose.model("Cloth", clothSchema);

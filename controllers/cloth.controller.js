@@ -8,7 +8,7 @@ module.exports.clothController = {
         description: req.body.description,
         price: req.body.price,
         category: req.body.category,
-        collection: req.body.collection,
+        collections: req.body.collection, 
         image: req.files,
         size: req.body.size,
         discount: req.body.discount,
@@ -20,7 +20,7 @@ module.exports.clothController = {
   },
 
   findClothes: async (req, res) => {
-    const data = await Cloth.find();
+    const data = await Cloth.find().populate('category')
     res.json(data);
   },
 
@@ -46,41 +46,5 @@ module.exports.clothController = {
     }
   },
 
-  //   getUserCloth: async (req, res) => {
-  //     const data = await Cloth.find({ user: req.user.id });
-  //     res.json(data);
-  //   },
-  //   findOneCloth: async (req, res) => {
-  //     try {
-  //       const oneCloth = await Cloth.findById(req.params.id).populate("user");
-
-  //       res.json(oneCloth);
-  //     } catch (error) {
-  //       res.json({ error: error.message });
-  //     }
-  //   },
-  //   removeImage: async (req, res) => {
-  //     try {
-  //       const oneCloth = await Cloth.findByIdAndUpdate(
-  //         req.params.id,
-  //         { $pull: { image: { filename: req.body.filename } } },
-  //         { new: true }
-  //       );
-  //       res.json(oneCloth);
-  //     } catch (error) {
-  //       res.json({ error: error.message });
-  //     }
-  //   },
-  //   addImageCloth: async (req, res) => {
-  //     try {
-  //       const { image } = await Product.findById(req.params.id);
-  //       const newImage = [...image, ...req.files];
-  //       const cloth = await Cloth.findByIdAndUpdate(req.params.id, {
-  //         image: newImage,
-  //       });
-  //       res.json(cloth);
-  //     } catch (error) {
-  //       res.json({ error: error.message });
-  //     }
-  //   },
+  
 };
