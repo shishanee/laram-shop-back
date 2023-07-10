@@ -6,8 +6,12 @@ const clothSchema = mongoose.Schema({
   price: Number,
 
   category: {
-    ref: "Category",
     type: mongoose.SchemaTypes.ObjectId,
+    ref: "Category",
+  },
+  collections: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: "Collection",
   },
 
   collections: {
