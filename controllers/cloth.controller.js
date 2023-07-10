@@ -20,7 +20,7 @@ module.exports.clothController = {
   },
 
   findClothes: async (req, res) => {
-    const data = await Cloth.find().populate('category')
+    const data = await Cloth.find().populate('category').populate('collections')
     res.json(data);
   },
 
