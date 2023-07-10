@@ -12,7 +12,7 @@ const clothSchema = mongoose.Schema({
       type: mongoose.SchemaTypes.ObjectId,
     },
   },
-//   image: [],
+  image: [],
   size: [
     { size: String, inStock: Number },
 ],

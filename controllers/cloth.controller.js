@@ -9,7 +9,7 @@ module.exports.clothController = {
         price: req.body.price,
         category: req.body.category,
         collection: req.body.collection,
-        // image: req.files,
+        image: req.files,
         size: req.body.size,
         discount: req.body.discount,
       });
