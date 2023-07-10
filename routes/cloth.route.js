@@ -7,4 +7,6 @@ const router = Router();
 router.get("/clothes", clothController.findClothes);
 router.post("/clothes", clothController.addCloth);
 router.patch("/clothes/:id", clothController.changeCloth);
-router.delete("/clothes/:id", clothController.removeCloth)
+router.delete("/clothes/:id", clothController.removeCloth);
+
+module.exports = router;

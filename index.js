@@ -9,10 +9,10 @@ app.use(express.json());
 app.use(cors());
 
 app.use(require('./routes/user.route'));
-// app.use(require('./routes/cloth.route'))
 app.use(require('./routes/user.route'))
 app.use(require('./routes/categories.route'))
 app.use(require('./routes/collections.route'))
+app.use(require('./routes/cloth.route'))
 
 
 mongoose
