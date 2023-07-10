@@ -11,7 +11,7 @@ app.use(cors());
 app.use(require('./routes/user.route'))
 app.use(require('./routes/categories.route'))
 app.use(require('./routes/collections.route'))
-
+app.use(require('./routes/cart.route'))
 
 mongoose
   .connect(
