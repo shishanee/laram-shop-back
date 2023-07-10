@@ -8,9 +8,11 @@ module.exports.clothController = {
         description: req.body.description,
         price: req.body.price,
         category: req.body.category,
-        collections: req.body.collection, 
+        collections: req.body.collections,
         image: req.files,
-        size: req.body.size,
+        size: [
+          {size: "XS", inStock: 0}, {size: "S", inStock: 0}, {size: "M", inStock: 0}, {size: "L", inStock: 0}, {size: "XL", inStock: 0}
+      ],
         discount: req.body.discount,
       });
       res.json(cloth);
@@ -20,7 +22,8 @@ module.exports.clothController = {
   },
 
   findClothes: async (req, res) => {
-    const data = await Cloth.find().populate('category').populate('collections')
+    const data = await Cloth.find().populate('collections', "-__v").populate('category', "-__v");
+
     res.json(data);
   },
 
@@ -45,6 +48,4 @@ module.exports.clothController = {
       res.json({ error: error.message });
     }
   },
-
-  
 };

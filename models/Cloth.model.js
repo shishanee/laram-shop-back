@@ -4,6 +4,7 @@ const clothSchema = mongoose.Schema({
   name: String,
   description: String,
   price: Number,
+
   category: {
     type: mongoose.SchemaTypes.ObjectId,
     ref: "Category",
@@ -12,6 +13,12 @@ const clothSchema = mongoose.Schema({
     type: mongoose.SchemaTypes.ObjectId,
     ref: "Collection",
   },
+
+  collections: {
+    ref: "Collection",
+    type: mongoose.SchemaTypes.ObjectId
+  },
+
   image: [],
   size: [{ size: String, inStock: Number }],
   discount: {
