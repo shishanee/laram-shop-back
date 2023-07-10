@@ -11,8 +11,8 @@ app.use(cors());
 app.use(require('./routes/user.route'));
 app.use(require('./routes/categories.route'))
 app.use(require('./routes/collections.route'))
+app.use(require('./routes/accessories.route'))
 app.use(require('./routes/cloth.route'))
-
 
 mongoose
   .connect(
