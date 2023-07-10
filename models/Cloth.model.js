@@ -16,10 +16,10 @@ const clothSchema = mongoose.Schema({
   size: [
     { size: String, inStock: Number },
 ],
-  discount: [{
+  discount: {
     type: Number,
     default: 0 
-  }]
+  }
 });
 
 const Cloth = mongoose.model("Cloth", clothSchema);
