@@ -62,4 +62,20 @@ module.exports.clothController = {
       res.json({ error: error.message });
     }
   },
+  allCollection: async (req, res) => {
+    try {
+      const data = await Cloth.find({ collections: req.params.id });
+      res.json(data);
+    } catch (error) {
+      res.json({ error: error.message });
+    }
+  },
+  allCategory: async (req, res) => {
+    try {
+      const data = await Cloth.find({ category: req.params.id });
+      res.json(data);
+    } catch (error) {
+      res.json({ error: error.message });
+    }
+  },
 };
