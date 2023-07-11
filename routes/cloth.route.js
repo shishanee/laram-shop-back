@@ -9,5 +9,6 @@ router.get("/clothes", clothController.findClothes);
 router.post("/clothes", fileMiddleware.array("img", 4), clothController.addCloth);
 router.patch("/clothes/:id", clothController.changeCloth);
 router.delete("/clothes/:id", clothController.removeCloth);
+router.get('/clothes/:id', clothController.findOne) 
 
 module.exports = router;
