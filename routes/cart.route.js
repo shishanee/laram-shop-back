@@ -6,5 +6,6 @@ const router = Router();
 
 router.get("/user-cart", authMiddleware, CartController.getUserCart);
 router.post("/cart-add-cloth/:id", authMiddleware, CartController.addCloth);
+router.post("/buy-cloths", authMiddleware, CartController.buyCloths);
 
 module.exports = router;
