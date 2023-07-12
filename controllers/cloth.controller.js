@@ -49,14 +49,4 @@ module.exports.clothController = {
     }
   },
   
-  // addClothInStock: async (req, res) => {
-  //   const { size } = await Cloth.findById(req.params.id)
-  //   try {
-  //   const inStock = await Cloth.findByIdAndUpdate (req.params.id, {
-  //       size: req.body.size
-  //     })
-  //   } catch (error) {
-  //     res.json({error: error.message})
-  //   }
-  // }
 };
