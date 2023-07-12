@@ -66,6 +66,7 @@ module.exports.CartController = {
       }, 0);
 
       res.json(cart); // Для ордера
+      
     } catch (error) {
       res.json(`${error}: error buy cloth`);
     }
