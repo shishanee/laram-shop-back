@@ -6,6 +6,7 @@ const CartSchema = mongoose.Schema({
     {
       cloth: { type: mongoose.SchemaTypes.ObjectId, ref: "Cloth" },
       size: String,
+      amount: { type: Number, default: 1 },
     },
   ],
 });
