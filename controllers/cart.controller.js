@@ -44,7 +44,9 @@ module.exports.CartController = {
   },
   buyCloths: async (req, res) => {
     try {
-      const { cart } = Cart.findOne({ userId: req.user.id });
+      const { cart } = Cart.findOne({ userId: req.user.id }).populate(
+        "cart.cloth"
+      );
       const notAvailable = [];
       cart.map(async (item) => {
         const { size } = await Cloth.findById(item.cloth);
@@ -63,13 +65,22 @@ module.exports.CartController = {
           size: newSize,
         });
       });
+
       if (notAvailable.length) {
         const newCart = cart.filter(
           (item) => !notAvailable.includes(item.cloth)
         );
 
+        const newTotal = newCart.reduce((accumulator, item) => {
+          return accumulator + item.cloth.price * item.amount;
+        }, 0);
+
         res.json(newCart); // Для ордера
       }
+
+      const total = cart.reduce((accumulator, item) => {
+        return accumulator + item.cloth.price * item.amount;
+      }, 0);
 
       res.json(cart); // Для ордера
     } catch (error) {
