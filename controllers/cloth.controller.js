@@ -9,6 +9,7 @@ module.exports.clothController = {
         price: req.body.price,
         category: req.body.category,
         collections: req.body.collections,
+        accessory: req.body.accessory,
         image: req.files,
         size: [
           { size: "XS", inStock: 0 },
@@ -39,6 +40,7 @@ module.exports.clothController = {
         name: req.body.name,
         description: req.body.description,
         price: req.body.price,
+        accessory: req.body.accessory,
       });
       res.json(cloth);
     } catch (error) {
@@ -73,6 +75,14 @@ module.exports.clothController = {
   allCategory: async (req, res) => {
     try {
       const data = await Cloth.find({ category: req.params.id });
+      res.json(data);
+    } catch (error) {
+      res.json({ error: error.message });
+    }
+  },
+  allAccessory: async (req, res) => {
+    try {
+      const data = await Cloth.find({ accessory: req.params.id });
       res.json(data);
     } catch (error) {
       res.json({ error: error.message });

@@ -16,5 +16,6 @@ router.delete("/clothes/:id", clothController.removeCloth);
 router.get("/clothes/:id", clothController.findOne);
 router.get("/collection/:id", clothController.allCollection); // вывод одежды по коллекции
 router.get("/category/:id", clothController.allCategory); // вывод одежды по коллекции
+router.get("/accessory/:id", clothController.allAccessory); // вывод аксессуаров
 
 module.exports = router;
