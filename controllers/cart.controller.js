@@ -14,12 +14,15 @@ module.exports.CartController = {
     try {
       const { size } = await Cloth.findById(req.params.id);
       const { inStock } = size.find((item) => item.size === req.body.size);
-      const { cart } = Cart.findOne({ userId: req.user.id });
-      const availableInCart = cart.find((item) => item.cloth === req.params.id);
+      const { cart } = await Cart.findOne({ userId: req.user.id });
+      const availableInCart = cart.find(
+        (item) =>
+          item.cloth.toString() === req.params.id && item.size === req.body.size
+      );
       if (inStock > 0) {
         if (availableInCart) {
           const newCart = cart.map((item) => {
-            if (item.cloth === req.params.id) {
+            if (item.cloth.toString() === req.params.id) {
               item.amount++;
               return item;
             }
@@ -29,15 +32,15 @@ module.exports.CartController = {
             { userId: req.user.id },
             { cart: newCart }
           );
-          res.json("Добавлен в корзину");
+          return res.json("Добавлен в корзину");
         }
         await Cart.findOneAndUpdate(
           { userId: req.user.id },
-          { $push: { cart: req.params.id } }
+          { $push: { cart: { cloth: req.params.id, size: req.body.size } } }
         );
-        res.json("Добавлен в корзину");
+        return res.json("Добавлен в корзину");
       }
-      res.json("Что-то пошло не так...");
+      res.json("Нет в наличии");
     } catch (error) {
       res.json(`${error}: error add cloth`);
     }
@@ -65,8 +68,18 @@ module.exports.CartController = {
         return accumulator + item.cloth.price * item.amount;
       }, 0);
 
+      // const newSize = size.map((item) => {
+      //   if (item.size === req.body.size) {
+      //     item.inStock--;
+      //     return item;
+      //   }
+      //   return item;
+      // });
+      // await Cloth.findByIdAndUpdate(req.params.id, {
+      //   size: newSize,
+      // });
+
       res.json(cart); // Для ордера
-      
     } catch (error) {
       res.json(`${error}: error buy cloth`);
     }
