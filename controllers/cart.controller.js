@@ -47,17 +47,12 @@ module.exports.CartController = {
       const { cart } = Cart.findOne({ userId: req.user.id }).populate(
         "cart.cloth"
       );
-      const notAvailable = [];
       cart.map(async (item) => {
         const { size } = await Cloth.findById(item.cloth);
         const newSize = size.map((el) => {
           if (el.size === item.size) {
-            if (el.inStock >= item.amount) {
-              el.inStock - item.amount;
-              return el;
-            } else {
-              notAvailable.push(item.cloth);
-            }
+            el.inStock - item.amount;
+            return el;
           }
           return el;
         });
@@ -65,18 +60,6 @@ module.exports.CartController = {
           size: newSize,
         });
       });
-
-      if (notAvailable.length) {
-        const newCart = cart.filter(
-          (item) => !notAvailable.includes(item.cloth)
-        );
-
-        const newTotal = newCart.reduce((accumulator, item) => {
-          return accumulator + item.cloth.price * item.amount;
-        }, 0);
-
-        res.json(newCart); // Для ордера
-      }
 
       const total = cart.reduce((accumulator, item) => {
         return accumulator + item.cloth.price * item.amount;
