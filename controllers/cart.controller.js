@@ -4,7 +4,12 @@ const Cloth = require("../models/Cloth.model");
 module.exports.CartController = {
   getUserCart: async (req, res) => {
     try {
-      const data = await Cart.findById(req.user.id);
+      const data = await Cart.findOne({ userId: req.user.id }).populate({
+        path: "cart.cloth",
+        populate: {
+          path: "collections",
+        },
+      });
       res.json(data);
     } catch (error) {
       res.json(`${error}: error output cloths`);
@@ -22,7 +27,7 @@ module.exports.CartController = {
       if (inStock > 0) {
         if (availableInCart) {
           const newCart = cart.map((item) => {
-            if (item.cloth.toString() === req.params.id) {
+            if (item.cloth.toString() === req.params.id && item.size === req.body.size) {
               item.amount++;
               return item;
             }
