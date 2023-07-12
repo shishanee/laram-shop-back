@@ -9,10 +9,15 @@ module.exports.clothController = {
         price: req.body.price,
         category: req.body.category,
         collections: req.body.collections,
+        accessory: req.body.accessory,
         image: req.files,
         size: [
-          {size: "XS", inStock: 0}, {size: "S", inStock: 0}, {size: "M", inStock: 0}, {size: "L", inStock: 0}, {size: "XL", inStock: 0}
-      ],
+          { size: "XS", inStock: 0 },
+          { size: "S", inStock: 0 },
+          { size: "M", inStock: 0 },
+          { size: "L", inStock: 0 },
+          { size: "XL", inStock: 0 },
+        ],
         discount: req.body.discount,
       });
       res.json(cloth);
@@ -22,7 +27,9 @@ module.exports.clothController = {
   },
 
   findClothes: async (req, res) => {
-    const data = await Cloth.find().populate('collections', "-__v").populate('category', "-__v");
+    const data = await Cloth.find()
+      .populate("collections", "-__v")
+      .populate("category", "-__v");
 
     res.json(data);
   },
@@ -33,10 +40,19 @@ module.exports.clothController = {
         name: req.body.name,
         description: req.body.description,
         price: req.body.price,
+        accessory: req.body.accessory,
       });
       res.json(cloth);
     } catch (error) {
       res.json(`${error}: change cloth`);
+    }
+  },
+  findOne: async (req, res) => {
+    try {
+      const data = await Cloth.findById(req.params.id);
+      res.json(data);
+    } catch (error) {
+      res.json({ error: error.message });
     }
   },
 
@@ -48,5 +64,29 @@ module.exports.clothController = {
       res.json({ error: error.message });
     }
   },
-  
+
+  allCollection: async (req, res) => {
+    try {
+      const data = await Cloth.find({ collections: req.params.id });
+      res.json(data);
+    } catch (error) {
+      res.json({ error: error.message });
+    }
+  },
+  allCategory: async (req, res) => {
+    try {
+      const data = await Cloth.find({ category: req.params.id });
+      res.json(data);
+    } catch (error) {
+      res.json({ error: error.message });
+    }
+  },
+  allAccessory: async (req, res) => {
+    try {
+      const data = await Cloth.find({ accessory: req.params.id });
+      res.json(data);
+    } catch (error) {
+      res.json({ error: error.message });
+    }
+  },
 };

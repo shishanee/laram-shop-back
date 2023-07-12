@@ -6,14 +6,17 @@ const mongoose = require("mongoose");
 const app = express();
 
 app.use(express.json());
+app.use('/images', express.static(__dirname + '/images'));
 app.use(cors());
 
 app.use(require('./routes/user.route'));
 app.use(require('./routes/categories.route'))
 app.use(require('./routes/collections.route'))
+app.use(require('./routes/cart.route'))
 app.use(require('./routes/accessories.route'))
 app.use(require('./routes/cloth.route'))
 app.use(require("./routes/order.route"))
+
 
 mongoose
   .connect(
