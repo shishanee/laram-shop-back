@@ -44,7 +44,7 @@ module.exports.clothController = {
       });
       res.json(cloth);
     } catch (error) {
-      res.json(`${error}: change product`);
+      res.json(`${error}: change cloth`);
     }
   },
   findOne: async (req, res) => {
@@ -64,6 +64,7 @@ module.exports.clothController = {
       res.json({ error: error.message });
     }
   },
+
   allCollection: async (req, res) => {
     try {
       const data = await Cloth.find({ collections: req.params.id });
