@@ -2,6 +2,7 @@ const { JsonWebTokenError } = require("jsonwebtoken");
 const User = require("../models/User.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const Cart = require("../models/Cart.model");
 
 module.exports.userController = {
   // Регистрация пользователя
@@ -19,6 +20,10 @@ module.exports.userController = {
     const user = await User.create({
       login: login,
       password: hash,
+    });
+
+    await Cart.create({
+      userId: user._id,
     });
 
     res.json(user);
