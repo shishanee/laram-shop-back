@@ -14,7 +14,23 @@ module.exports.CartController = {
     try {
       const { size } = await Cloth.findById(req.params.id);
       const { inStock } = size.find((item) => item.size === req.body.size);
+      const { cart } = Cart.findOne({ userId: req.user.id });
+      const availableInCart = cart.find((item) => item.cloth === req.params.id);
       if (inStock > 0) {
+        if (availableInCart) {
+          const newCart = cart.map((item) => {
+            if (item.cloth === req.params.id) {
+              item.amount++;
+              return item;
+            }
+            return item;
+          });
+          await Cart.findOneAndUpdate(
+            { userId: req.user.id },
+            { cart: newCart }
+          );
+          res.json("Добавлен в корзину");
+        }
         await Cart.findOneAndUpdate(
           { userId: req.user.id },
           { $push: { cart: req.params.id } }
@@ -34,8 +50,8 @@ module.exports.CartController = {
         const { size } = await Cloth.findById(item.cloth);
         const newSize = size.map((el) => {
           if (el.size === item.size) {
-            if (el.inStock > 0) {
-              el.inStock--;
+            if (el.inStock >= item.amount) {
+              el.inStock - item.amount;
               return el;
             } else {
               notAvailable.push(item.cloth);
@@ -48,13 +64,14 @@ module.exports.CartController = {
         });
       });
       if (notAvailable.length) {
-        let newCart;
-        notAvailable.map((el) => {
-          newCart = cart.filter((item) => item.cloth !== el);
-        });
-        res.json(newCart);
+        const newCart = cart.filter(
+          (item) => !notAvailable.includes(item.cloth)
+        );
+
+        res.json(newCart); // Для ордера
       }
-      res.json(cart);
+
+      res.json(cart); // Для ордера
     } catch (error) {
       res.json(`${error}: error buy cloth`);
     }
