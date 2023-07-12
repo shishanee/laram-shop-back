@@ -1,4 +1,4 @@
-const Accessory = require("../models/Collection.model");
+const Accessory = require("../models/Accessory.model");
 
 module.exports.accessoriesController = {
   getAllAccessories: async (req, res) => {
