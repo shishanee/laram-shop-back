@@ -27,7 +27,10 @@ module.exports.CartController = {
       if (inStock > 0) {
         if (availableInCart) {
           const newCart = cart.map((item) => {
-            if (item.cloth.toString() === req.params.id && item.size === req.body.size) {
+            if (
+              item.cloth.toString() === req.params.id &&
+              item.size === req.body.size
+            ) {
               item.amount++;
               return item;
             }
@@ -46,6 +49,47 @@ module.exports.CartController = {
         return res.json("Добавлен в корзину");
       }
       res.json("Нет в наличии");
+    } catch (error) {
+      res.json(`${error}: error add cloth`);
+    }
+  },
+  minusCloth: async (req, res) => {
+    try {
+      const { cart } = await Cart.findOne({ userId: req.user.id });
+
+      const newCart = cart.map((item) => {
+        if (
+          item.cloth.toString() === req.params.id &&
+          item.size === req.body.size
+        ) {
+          if (item.amount > 1) {
+            item.amount--;
+          }
+          return item;
+        }
+        return item;
+      });
+      await Cart.findOneAndUpdate({ userId: req.user.id }, { cart: newCart });
+      res.json("Удален из корзины");
+    } catch (error) {
+      res.json(`${error}: error add cloth`);
+    }
+  },
+  removeCloth: async (req, res) => {
+    try {
+      const { cart } = await Cart.findOne({ userId: req.user.id });
+
+      const newCart = cart.filter((item) => {
+        if (
+          item.cloth.toString() === req.params.id &&
+          item.size === req.body.size
+        ) {
+          return false;
+        }
+        return true;
+      });
+      await Cart.findOneAndUpdate({ userId: req.user.id }, { cart: newCart });
+      res.json("Удален из корзины");
     } catch (error) {
       res.json(`${error}: error add cloth`);
     }
