@@ -45,7 +45,7 @@ module.exports.CartController = {
           );
           return res.json("Добавлен в корзину");
         }
-        const cloth = await Cart.findOneAndUpdate(
+        await Cart.findOneAndUpdate(
           { userId: req.user.id },
           { $push: { cart: { cloth: req.params.id, size: req.body.size } } }
         );
