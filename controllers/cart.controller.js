@@ -42,11 +42,13 @@ module.exports.CartController = {
           );
           return res.json("Добавлен в корзину");
         }
-        await Cart.findOneAndUpdate(
+        const cloth = await Cart.findOneAndUpdate(
           { userId: req.user.id },
           { $push: { cart: { cloth: req.params.id, size: req.body.size } } }
         );
-        return res.json("Добавлен в корзину");
+        const updateCart = await Cart.findOne({ userId: req.user.id });
+        const newCloth = updateCart.cart.pop();
+        return res.json(newCloth);
       }
       res.json("Нет в наличии");
     } catch (error) {
@@ -56,7 +58,6 @@ module.exports.CartController = {
   minusCloth: async (req, res) => {
     try {
       const { cart } = await Cart.findOne({ userId: req.user.id });
-
       const newCart = cart.map((item) => {
         if (
           item.cloth.toString() === req.params.id &&
@@ -113,11 +114,16 @@ module.exports.CartController = {
           size: newSize,
         });
       });
-
       const total = cart.reduce((accumulator, item) => {
         return accumulator + item.cloth.price * item.amount;
       }, 0);
-      res.json(cart); // Для ордера
+      await Cart.findOneAndUpdate(
+        { userId: req.user.id },
+        {
+          cart: [],
+        }
+      );
+      res.json("Оплата прошла успешно"); // Для ордера
     } catch (error) {
       res.json(`${error}: error buy cloth`);
     }
