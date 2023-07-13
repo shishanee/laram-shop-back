@@ -96,19 +96,20 @@ module.exports.CartController = {
   },
   buyCloths: async (req, res) => {
     try {
-      const { cart } = Cart.findOne({ userId: req.user.id }).populate(
+      const { cart } = await Cart.findOne({ userId: req.user.id }).populate(
         "cart.cloth"
       );
       cart.map(async (item) => {
-        const { size } = await Cloth.findById(item.cloth);
+        const { size } = await Cloth.findById(item.cloth._id);
+
         const newSize = size.map((el) => {
           if (el.size === item.size) {
-            el.inStock - item.amount;
+            el.inStock = el.inStock - item.amount;
             return el;
           }
           return el;
         });
-        await Cloth.findByIdAndUpdate(item, {
+        await Cloth.findByIdAndUpdate(item.cloth._id, {
           size: newSize,
         });
       });
@@ -116,18 +117,6 @@ module.exports.CartController = {
       const total = cart.reduce((accumulator, item) => {
         return accumulator + item.cloth.price * item.amount;
       }, 0);
-
-      // const newSize = size.map((item) => {
-      //   if (item.size === req.body.size) {
-      //     item.inStock--;
-      //     return item;
-      //   }
-      //   return item;
-      // });
-      // await Cloth.findByIdAndUpdate(req.params.id, {
-      //   size: newSize,
-      // });
-
       res.json(cart); // Для ордера
     } catch (error) {
       res.json(`${error}: error buy cloth`);
