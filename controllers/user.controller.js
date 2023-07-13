@@ -7,7 +7,7 @@ const Cart = require("../models/Cart.model");
 module.exports.userController = {
   // Регистрация пользователя
   registerUser: async (req, res) => {
-    const { login, password } = req.body;
+    const { login, password, name } = req.body;
     const candidate = await User.findOne({ login });
     if (candidate) {
       return res
@@ -18,6 +18,7 @@ module.exports.userController = {
     const hash = await bcrypt.hash(password, Number(process.env.BCRYPT_ROUNDS));
 
     const user = await User.create({
+      name: name,
       login: login,
       password: hash,
     });
@@ -33,12 +34,12 @@ module.exports.userController = {
     const { login, password } = req.body;
     const candidate = await User.findOne({ login: login });
     if (!candidate) {
-      return res.status(401).json({ error: "Неверный Логин, или пароль" });
+      return res.status(401).json({ error: "Неверный Логин или пароль" });
     }
     const valid = await bcrypt.compare(password, candidate.password);
 
     if (!valid) {
-      return res.status(401).json({ error: "Неверный Логин, или пароль" });
+      return res.status(401).json({ error: "Неверный Логин или пароль" });
     }
     const payload = {
       id: candidate._id,
@@ -50,5 +51,10 @@ module.exports.userController = {
     });
 
     res.json(token);
+  },
+  // вывод одного пользователя
+  getUser: async (req, res) => {
+    const data = await User.findById(req.user.id);
+    res.json(data);
   },
 };
