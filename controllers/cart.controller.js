@@ -42,11 +42,13 @@ module.exports.CartController = {
           );
           return res.json("Добавлен в корзину");
         }
-        await Cart.findOneAndUpdate(
+        const cloth = await Cart.findOneAndUpdate(
           { userId: req.user.id },
           { $push: { cart: { cloth: req.params.id, size: req.body.size } } }
         );
-        return res.json("Добавлен в корзину");
+        const updateCart = await Cart.findOne({ userId: req.user.id });
+        const newCloth = updateCart.cart.pop();
+        return res.json(newCloth);
       }
       res.json("Нет в наличии");
     } catch (error) {
@@ -56,7 +58,6 @@ module.exports.CartController = {
   minusCloth: async (req, res) => {
     try {
       const { cart } = await Cart.findOne({ userId: req.user.id });
-
       const newCart = cart.map((item) => {
         if (
           item.cloth.toString() === req.params.id &&
