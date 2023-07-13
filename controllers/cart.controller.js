@@ -46,7 +46,7 @@ module.exports.CartController = {
           { userId: req.user.id },
           { $push: { cart: { cloth: req.params.id, size: req.body.size } } }
         );
-        const updateCart = await Cart.findOne({ userId: req.user.id });
+        const updateCart = await Cart.findOne({ userId: req.user.id }).populate("cart.cloth");
         const newCloth = updateCart.cart.pop();
         return res.json(newCloth);
       }
