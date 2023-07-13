@@ -20,11 +20,14 @@ module.exports.CartController = {
       const { size } = await Cloth.findById(req.params.id);
       const { inStock } = size.find((item) => item.size === req.body.size);
       const { cart } = await Cart.findOne({ userId: req.user.id });
-      const availableInCart = cart.find(
+
+      const haveCartCloth = cart.find(
         (item) =>
           item.cloth.toString() === req.params.id && item.size === req.body.size
       );
-      if (inStock > 0) {
+      const availableInCart = haveCartCloth ? haveCartCloth.amount : 0;
+
+      if (inStock > availableInCart) {
         if (availableInCart) {
           const newCart = cart.map((item) => {
             if (
@@ -42,11 +45,13 @@ module.exports.CartController = {
           );
           return res.json("Добавлен в корзину");
         }
-        const cloth = await Cart.findOneAndUpdate(
+        await Cart.findOneAndUpdate(
           { userId: req.user.id },
           { $push: { cart: { cloth: req.params.id, size: req.body.size } } }
         );
-        const updateCart = await Cart.findOne({ userId: req.user.id }).populate("cart.cloth");
+        const updateCart = await Cart.findOne({ userId: req.user.id }).populate(
+          "cart.cloth"
+        );
         const newCloth = updateCart.cart.pop();
         return res.json(newCloth);
       }
