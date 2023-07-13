@@ -114,11 +114,16 @@ module.exports.CartController = {
           size: newSize,
         });
       });
-
       const total = cart.reduce((accumulator, item) => {
         return accumulator + item.cloth.price * item.amount;
       }, 0);
-      res.json(cart); // Для ордера
+      await Cart.findOneAndUpdate(
+        { userId: req.user.id },
+        {
+          cart: [],
+        }
+      );
+      res.json("Оплата прошла успешно"); // Для ордера
     } catch (error) {
       res.json(`${error}: error buy cloth`);
     }
