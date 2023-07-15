@@ -1,5 +1,6 @@
 const Cart = require("../models/Cart.model");
 const Cloth = require("../models/Cloth.model");
+const Order = require("../models/Order.model");
 
 module.exports.CartController = {
   getUserCart: async (req, res) => {
@@ -102,9 +103,9 @@ module.exports.CartController = {
   },
   buyCloths: async (req, res) => {
     try {
-      const { cart } = await Cart.findOne({ userId: req.user.id }).populate(
-        "cart.cloth"
-      );
+      const { cart } = await Cart.findOne({ userId: req.user.id })
+        .populate("cart.cloth")
+        .lean();
       cart.map(async (item) => {
         const { size } = await Cloth.findById(item.cloth._id);
 
@@ -122,13 +123,26 @@ module.exports.CartController = {
       const total = cart.reduce((accumulator, item) => {
         return accumulator + item.cloth.price * item.amount;
       }, 0);
+      const number = await Order.find();
+      await Order.create({
+        userId: req.user.id,
+        orderNumber: number.length,
+        products: cart,
+        city: req.body.city,
+        address: req.body.address,
+        name: req.body.name,
+        phone: req.body.phone,
+        email: req.body.email,
+        comment: req.body.comment,
+        total,
+      });
       await Cart.findOneAndUpdate(
         { userId: req.user.id },
         {
           cart: [],
         }
       );
-      res.json("Оплата прошла успешно"); // Для ордера
+      res.json("Все нормально");
     } catch (error) {
       res.json(`${error}: error buy cloth`);
     }
