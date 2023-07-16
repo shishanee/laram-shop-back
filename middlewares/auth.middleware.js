@@ -12,7 +12,6 @@ module.exports = async (req, res, next) => {
   if (type !== "Bearer") {
     return res.status(401).json("неверный тип токена");
   }
-
   try {
     req.user = await jwt.verify(token, process.env.SECRET_JWT_KEY);
 
