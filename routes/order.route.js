@@ -4,7 +4,6 @@ const { orderController } = require("../controllers/order.controller");
 
 const router = Router();
 
-router.get("/orders", authMiddleware, orderController.getOrder);
-router.post("/orders", authMiddleware, orderController.addOrder)
+router.get("/orders", authMiddleware, orderController.getUserOrders);
 
 module.exports = router;

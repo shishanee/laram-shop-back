@@ -1,38 +1,28 @@
 const mongoose = require("mongoose");
 
 const orderSchema = mongoose.Schema({
-  customer: {
+  userId: {
     type: mongoose.SchemaTypes.ObjectId,
     ref: "User",
   },
-  number: {
-    type: Number,
-    default: Math.floor(1000 + Math.random() * 12000),
-  },
-  products: [
-    {
-      product: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Cloth",
-      },
-      quantity: {
-        type: Number,
-      },
-    },
-  ],
+  orderNumber: Number,
+  products: [{}],
   date: {
     type: Date,
     default: Date.now,
-    
   },
-
-  total: Number,
   status: {
     type: String,
     enum: ["В обработке", "Выполнен", "Отменен"],
     default: "В обработке",
   },
-
+  city: String,
+  address: String,
+  name: String,
+  phone: String,
+  email: String,
+  comment: String,
+  total: Number,
 });
 
 const Order = mongoose.model("Order", orderSchema);
