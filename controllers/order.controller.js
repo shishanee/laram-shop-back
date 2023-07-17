@@ -5,4 +5,8 @@ module.exports.orderController = {
     const orders = await Order.find({ userId: req.user.id });
     res.json(orders);
   },
+  getOrderById: async (req, res) => {
+    const order = await Order.findById(req.params.id);
+    res.json(order);
+  },
 };
